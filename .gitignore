@@ -1,0 +1,51 @@
+# Virtual environments
+.venv/
+.env/
+.env.*
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+
+# VS Code
+.vscode/
+
+# macOS metadata
+.DS_Store
+
+# Logs and test output
+*.log
+
+# Unit test cache
+.cache/
+.coverage
+
+# Chroma vector DB (if persisting locally)
+data/chromadb.db/
+data/chromadb/
+data/*.chroma/
+
+# Ollama model artifacts (if applicable)
+.ollama/
+models/
+
+# FastAPI OpenAPI cache (optional)
+openapi.json
+
+# Jupyter notebooks (optional, if not using)
+.ipynb_checkpoints/
+
+# Docker artifacts
+*.pid
+*.pid.lock
+
+# Docker-related files
+data/memory/
+tmp/
+
+.env
+!.env.example
