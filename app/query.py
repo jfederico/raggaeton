@@ -2,25 +2,39 @@ import os
 from dotenv import load_dotenv
 import chromadb
 
-def inspect_chromadb():
-    load_dotenv()
-    chroma_db_path = os.environ.get("CHROMA_DB_PATH")
-    if not chroma_db_path:
-        raise ValueError("CHROMA_DB_PATH not set in environment variables.")
+class QueryInspector:
+    def __init__(self, db_path=None):
+        load_dotenv()
+        env_db_path = os.environ.get("CHROMA_DB_PATH")
+        self.db_path = db_path or env_db_path
+        if not self.db_path:
+            raise ValueError("CHROMA_DB_PATH must be set in the environment or passed to QueryInspector.")
+        self.client = chromadb.PersistentClient(path=self.db_path)
 
-    client = chromadb.PersistentClient(path=chroma_db_path)
-    collections = client.list_collections()
-    if not collections:
-        print(f"No collections found in ChromaDB at {chroma_db_path}")
-        return
+    def list_collections(self):
+        return self.client.list_collections()
 
-    for collection in collections:
-        print(f"\nCollection: {collection.name}")
-        col = client.get_collection(collection.name)
+    def get_collection_info(self, collection_name):
+        col = self.client.get_collection(collection_name)
         results = col.get()
-        print("IDs:", results.get("ids"))
-        print("Metadatas:", results.get("metadatas"))
-        print("Documents:", results.get("documents"))
+        return {
+            "ids": results.get("ids"),
+            "metadatas": results.get("metadatas"),
+            "documents": results.get("documents")
+        }
+
+    def print_all_collections(self):
+        collections = self.list_collections()
+        if not collections:
+            print(f"No collections found in ChromaDB at {self.db_path}")
+            return
+        for collection in collections:
+            print(f"\nCollection: {collection.name}")
+            info = self.get_collection_info(collection.name)
+            print("IDs:", info["ids"])
+            print("Metadatas:", info["metadatas"])
+            print("Documents:", info["documents"])
 
 if __name__ == "__main__":
-    inspect_chromadb()
+    inspector = QueryInspector()
+    inspector.print_all_collections()

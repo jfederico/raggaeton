@@ -1,18 +1,21 @@
+import sys
 import os
-from dotenv import load_dotenv
-import chromadb
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from app.query import QueryInspector
 
-load_dotenv()
-chroma_db_path = os.environ.get("CHROMA_DB_PATH")
-if not chroma_db_path:
-    raise ValueError("CHROMA_DB_PATH not set in environment variables or .env file.")
+def main():
+    inspector = QueryInspector()
+    collections = inspector.list_collections()
+    if not collections:
+        print("No collections found in ChromaDB.")
+        return
+    for collection in collections:
+        print(f"\nCollection: {collection.name}")
+        info = inspector.get_collection_info(collection.name)
+        print("IDs:", info["ids"], "\n")
+        print("Metadatas:", info["metadatas"], "\n")
+        print("Documents:", info["documents"], "\n")
 
-client = chromadb.PersistentClient(path=chroma_db_path)
-collection = client.get_or_create_collection("rag-index")
-
-# List all documents/chunks
-results = collection.get()
-print("Document IDs:", results['ids'])
-print("Metadatas:", results['metadatas'])
-print("Documents:", results['documents'])
+if __name__ == "__main__":
+    main()
 

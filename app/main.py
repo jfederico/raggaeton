@@ -8,6 +8,7 @@ from llama_index.core.node_parser import SimpleNodeParser
 import tempfile
 import shutil
 from .ingest import RAGIngestionPipeline
+from .query import QueryInspector
 
 app = FastAPI()
 vector_index = None  # store global reference
@@ -56,8 +57,14 @@ async def ingest(
         except Exception:
             pass
 
+
+# Example: Return all collection info for demonstration
 @app.post("/query")
 async def query(req: QueryRequest):
-    global vector_index
-    response = vector_index.as_query_engine().query(req.question)
-    return {"answer": str(response)}
+    inspector = QueryInspector()
+    collections = inspector.list_collections()
+    if not collections:
+        return {"error": "No collections found in ChromaDB."}
+    # For now, just return info for the first collection
+    info = inspector.get_collection_info(collections[0].name)
+    return {"collection": collections[0].name, "info": info}
