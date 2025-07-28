@@ -1,6 +1,6 @@
-# RAGeaton – AI Retrieval Broker
+# RAGgeaton – AI Retrieval Broker
 
-RAGeaton is a modular, FastAPI-based RAG (Retrieval-Augmented Generation) service that provides semantic search and AI chat over course-specific memory. It's designed to work with Moodle plugins, providing endpoints for ingestion and contextual chat generation using the LlamaIndex framework and ChromaDB for vector storage.
+RAGgeaton is a modular, FastAPI-based RAG (Retrieval-Augmented Generation) service that provides semantic search and AI chat over course-specific memory. It's designed to work with Moodle plugins, providing endpoints for ingestion and contextual chat generation using the LlamaIndex framework and ChromaDB for vector storage.
 
 ## Features
 
@@ -20,7 +20,7 @@ RAGeaton is a modular, FastAPI-based RAG (Retrieval-Augmented Generation) servic
 
 ```bash
 git clone <your-repo-url>
-cd rageaton
+cd raggeaton
 python3.11 -m venv .venv
 source .venv/bin/activate
 ```
